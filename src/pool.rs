@@ -59,7 +59,12 @@
 
 use std::panic::{RefUnwindSafe, UnwindSafe};
 use std::sync::atomic::{AtomicUsize, Ordering};
+
+#[cfg(not(target_env = "sgx"))]
 use std::sync::Mutex;
+
+#[cfg(all(target_env = "sgx"))]
+use std::sync::SgxMutex as Mutex;
 
 /// An atomic counter used to allocate thread IDs.
 static COUNTER: AtomicUsize = AtomicUsize::new(1);
